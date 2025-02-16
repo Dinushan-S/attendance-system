@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <h2>Welcome to the Home Page</h2>
+    <button onclick="logout()">Logout</button>
+
+    <script>
+        //Redirect to login if not authenticated
+        if (!localStorage.getItem("token")) {
+            window.location.href = "index.html";
+        }
+
+        function logout() {
+            localStorage.removeItem("token");
+            window.location.href = "index.html";
+        }
+
+        //Prevent going back to login page after logging in
+        window.history.pushState(null, null, window.location.href);
+        window.onpopstate = function () {
+            window.history.pushState(null, null, window.location.href);
+        };
+    </script>
+</body>
+</html>
