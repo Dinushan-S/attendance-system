@@ -2,6 +2,8 @@ package com._3axislab.server.controller;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -11,7 +13,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/auth")
 public class LoginController {
-    private static final String SECRET_KEY = "your_secret_key";
+    @Value("${jwt.secret}") // Load from application.properties
+    private String secretKey;
 
     @PostMapping("/login")
     public Map<String, String> login(@RequestBody Map<String, String> credentials) {
@@ -23,7 +26,7 @@ public class LoginController {
                     .setSubject(username)
                     .setIssuedAt(new Date())
                     .setExpiration(new Date(System.currentTimeMillis() + 600000))
-                    .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                    .signWith(SignatureAlgorithm.HS256, secretKey)
                     .compact();
 
             Map<String, String> response = new HashMap<>();
